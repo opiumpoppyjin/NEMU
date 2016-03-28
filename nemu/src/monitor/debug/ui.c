@@ -92,7 +92,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 
 	{ "info", "-r Print information of registers.\
-		-w Print information of watchpoints.", cmd_info},
+		\n\t-w Print information of watchpoints.", cmd_info},
 	{ "si", "Single-step excution", cmd_si}
 
 	/* TODO: Add more commands */
