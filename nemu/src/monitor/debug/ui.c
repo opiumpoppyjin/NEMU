@@ -7,8 +7,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-//#include <cpu/reg.h>
-
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -82,6 +80,20 @@ static int cmd_info(char *args){
 	return 0;
 }
 
+extern uint32_t expr(char *e, bool *success);  
+static int nr_exprs=1;
+static int cmd_p(char *args){
+	bool success=1;
+	if (args==NULL)
+		return -1;
+	int value=expr(args,&success);
+	if (success){
+		printf("$%d = %d\n",nr_exprs,value);
+		nr_exprs++;
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -93,6 +105,7 @@ static struct {
 
 	{ "info", "-r Print information of registers.\
 		\n       -w Print information of watchpoints.", cmd_info},
+	{ "p", "Expression evaluation", cmd_p},
 	{ "si", "Single-step excution", cmd_si}
 
 	/* TODO: Add more commands */
