@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+//#include <cpu/reg.h>
+
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -48,6 +50,38 @@ static int cmd_si(char *args){
 	return 0;
 }
 
+static int cmd_info(char *args){
+	if (args==NULL)
+		return -1;
+	else if(strcmp(args,"r")==0){
+		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
+		printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
+		printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx); 
+		printf("%-15s%#-15X%u\n","ebx", cpu.ebx, cpu.ebx); 
+		printf("%-15s%#-15X%u\n","esp", cpu.esp, cpu.esp); 
+		printf("%-15s%#-15X%u\n","ebp", cpu.ebp, cpu.ebp); 
+		printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi); 
+		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
+		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
+		/*
+		printf("CF PF AF ZF SF TF IF DF OF\n"
+				"%2d %2d %2d %2d %2d %2d %2d %2d %2d\n",
+				FLAG_VAL(CF),
+				FLAG_VAL(PF),
+				FLAG_VAL(AF),
+				FLAG_VAL(ZF),
+				FLAG_VAL(SF),
+				FLAG_VAL(TF),
+				FLAG_VAL(IF),
+				FLAG_VAL(DF),
+				FLAG_VAL(OF)
+			  );
+		printf("CS %x DS %x SS %x\n", cpu.cs, cpu.ds, cpu.ss);
+		*/
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -57,7 +91,9 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 
-	{ "si", "Single-step excution",cmd_si}
+	{ "info", "-r Print information of registers.\
+		-w Print information of watchpoints.", cmd_info},
+	{ "si", "Single-step excution", cmd_si}
 
 	/* TODO: Add more commands */
 
