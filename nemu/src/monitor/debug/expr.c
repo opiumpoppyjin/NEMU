@@ -122,7 +122,9 @@ static bool make_token(char *e) {
 						if (nr_token==0||\
 								(tokens[nr_token-1].type!=HEX\
 								 &&tokens[nr_token-1].type!=NUM\
-								 &&tokens[nr_token-1].type!=REG)){
+								 &&tokens[nr_token-1].type!=REG\
+								 &&tokens[nr_token-1].type!=RB\
+								 )){
 							if (rules[i].token_type==SUB)
 								tokens[nr_token].type=NEG;
 							else
