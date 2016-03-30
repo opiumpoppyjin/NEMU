@@ -34,7 +34,7 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
-	{"0x[0-9a-f]+", HEX},              // heximal
+	{"0[xX][0-9a-f]+", HEX},              // heximal
 	{"[0-9]+", NUM},                // decimal
 	{"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|al|ah|cl|ch|dl|dh|bl|bh)", REG},
 	{"[A-Za-z_][A-Za-z_0-9]*", IDENTIFIER},  //标识符
