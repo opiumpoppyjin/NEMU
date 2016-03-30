@@ -191,6 +191,7 @@ static int find_op(int p, int q) {
 		}
 
 	}
+	exit(0);
 	return op;
 }
 
@@ -260,7 +261,6 @@ static int eval(int p,int q,bool *success){
 		}
 
 		int eval1 = eval(p, op - 1,success);
-		exit(1);
 		printf("eval=%d %d %d\n",eval1,op,eval2);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
