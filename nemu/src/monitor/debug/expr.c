@@ -170,7 +170,7 @@ static int level(int op){
 		case BIT_OR:return 9;
 		case AND: return 10;			
 		case OR: return 11;
-		default:return 13;
+		default:return 0;;
 	}
 }
 
@@ -189,7 +189,7 @@ static int find_op(int p, int q) {
 				printf("op=%d",op);
 				minlevel=thislevel;
 		}
-		else if(thislevel!=13){
+		else if(thislevel!=0){
 			return op;
 		}
 
