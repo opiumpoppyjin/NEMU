@@ -233,6 +233,7 @@ static bool check_parentheses_matched(int p,int q){
 		}
 	}
 	if (count == 0 && stack[0] == -1) return true;
+	printf("()%d %d\n",count,stack[0]);
 	return false;
 }
 
