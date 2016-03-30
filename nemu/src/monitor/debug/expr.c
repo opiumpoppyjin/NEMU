@@ -237,11 +237,11 @@ static bool check_parentheses_matched(int p,int q){
 }
 
 uint32_t expr(char *e, bool *success) {
-	printf("nr_token1=%d\n",nr_token);
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
+	printf("nr_token1=%d\n",nr_token);
 
 	if (check_parentheses_matched(0,nr_token-1)==false){
 		*success = false;
