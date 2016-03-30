@@ -16,7 +16,7 @@ enum {
 	ADD, SUB,                   // 13, 14
 	MUL, DIV, MOD,              // 15, 16, 17
 	NOT, POINTER, NEG, BIT_NOT, // 18, 19, 20, 21
-	LBRACKET, RBRACKET,         // 22, 23
+	LB, RB,         // 22, 23
 	NUM, HEX, REG,              // 25, 26, 27
 	IDENTIFIER,                 // 28
 	NOTYPE                      // 29
@@ -60,8 +60,8 @@ static struct rule {
 	{"-", NEG},
 	{"\\~", BIT_NOT},
 	{"\\*", POINTER},
-	{"\\(", LBRACKET},
-	{"\\)", RBRACKET}
+	{"\\(", LB},
+	{"\\)", RB}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -119,7 +119,7 @@ static bool make_token(char *e) {
 					case HEX:case NUM:case REG: 
 						tokens[nr_token].type=rules[i].token_type;
 						strncpy(tokens[nr_token].str,e+position,substr_len);
-				printf("num0=%s\n",tokens[nr_token].str);
+						printf("num0=%s\n",tokens[nr_token].str);
 						break;
 					case SUB:case MUL:
 						if (nr_token==0||\
@@ -147,7 +147,27 @@ static bool make_token(char *e) {
 }
 
 static bool check_parentheses(int p,int q,bool *success){
-	return true;
+	if (tokens[p].type!=LB||tokens[q].type!=RB){
+		return false;
+	}
+	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
+	int stack[32];                // to pair parentheses
+	memset(stack, -1, 32);
+	int i, j;
+	for (i = j = 0; i < nr_token; i++) {
+		if (tokens[i].type == LB) {
+			count++;
+			stack[j++] = i;//j处的右括号对应i处的左括号
+			assert(tokens[stack[j-1]].type == LB);
+		}
+		else if (tokens[i].type == RB) {
+			count--;
+			stack[j] = -1;
+		}
+	}
+	if (count == 0 && stack[0] == -1) return true;
+	*success=false;
+	return false;
 }
 
 static int eval(int p,int q,bool *success){
@@ -178,20 +198,20 @@ static int eval(int p,int q,bool *success){
 				else if (!strcmp(tokens[p].str, "$esi")) return cpu.esi;
 				else if (!strcmp(tokens[p].str, "$edi")) return cpu.edi;
 				else if (!strcmp(tokens[p].str, "$eip")) return cpu.eip;
-			/*
-				else if (!strcmp(temp, "$ax"))  return reg_w(R_AX);
-				else if (!strcmp(temp, "$al"))  return reg_b(R_AL);
-				else if (!strcmp(temp, "$ah"))  return reg_b(R_AH);
-				else if (!strcmp(temp, "$cx"))  return reg_w(R_CX);
-				else if (!strcmp(temp, "$cl"))  return reg_b(R_CL);
-				else if (!strcmp(temp, "$ch"))  return reg_b(R_CH);
-				else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
-				else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
-				else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
-				else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
-				else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
-				else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
-			*/
+				/*
+				   else if (!strcmp(temp, "$ax"))  return reg_w(R_AX);
+				   else if (!strcmp(temp, "$al"))  return reg_b(R_AL);
+				   else if (!strcmp(temp, "$ah"))  return reg_b(R_AH);
+				   else if (!strcmp(temp, "$cx"))  return reg_w(R_CX);
+				   else if (!strcmp(temp, "$cl"))  return reg_b(R_CL);
+				   else if (!strcmp(temp, "$ch"))  return reg_b(R_CH);
+				   else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
+				   else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
+				   else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
+				   else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
+				   else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
+				   else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
+				   */
 			default: 
 				*success=false;
 				return 0;
