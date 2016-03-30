@@ -148,9 +148,9 @@ static bool make_token(char *e) {
 
 
 static bool check_parentheses(int p,int q,bool *success){
-	if (tokens[p].type!=LB||tokens[q].type!=RB)
-		return false;
-	return true;
+	if (tokens[p].type==LB&&tokens[q].type==RB)
+		return true;
+	return false;
 }
 
 static int eval(int p,int q,bool *success){
