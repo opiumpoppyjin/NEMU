@@ -182,6 +182,15 @@ static int find_op(int p, int q) {
 	int op=-1;
 	int i;
 	for (i=p;i<=q;i++){
+		if (tokens[i].type==LB){
+			int j;
+			for(j=q;j>i;j--){
+				if (tokens[j].type==RB){
+					i=j+1;
+					break;
+				}
+			}
+		}
 		thislevel=level(tokens[i].type);
 		printf("level=%d %d\n",thislevel,minlevel);
 		if (thislevel>minlevel){
