@@ -188,7 +188,7 @@ static int find_op(int p, int q) {
 
 		}
 		thislevel=level(tokens[i].type);
-		if (thislevel>minlevel){
+		if (thislevel>=minlevel){
 				op=i;
 				minlevel=thislevel;
 		}
