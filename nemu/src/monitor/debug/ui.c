@@ -91,6 +91,9 @@ static int cmd_p(char *args){
 		printf("$%d = %d\n",nr_exprs,value);
 		nr_exprs++;
 	}
+	else{
+		printf("Invalid expression!\n");
+	}
 	return 0;
 }
 
