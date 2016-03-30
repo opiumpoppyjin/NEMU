@@ -221,6 +221,7 @@ static int eval(int p,int q,bool *success){
 		/* The expression is surrounded by a matched pair of parentheses.
 		 * * If that is the case, just throw away the parentheses.
 		 * */
+		printf("lala!!\n");
 		return eval(p + 1, q - 1,success);
 	} 
 	else {
