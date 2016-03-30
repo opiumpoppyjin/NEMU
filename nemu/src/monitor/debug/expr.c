@@ -180,6 +180,7 @@ static int find_op(int p, int q) {
 	int i;
 	for (i=p;i<=q;i++){
 		thislevel=level(tokens[i].type);
+		printf("level=%d\n",thislevel);
 		if (thislevel<minlevel){
 				op=i;
 				printf("op=%d",op);
