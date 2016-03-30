@@ -136,6 +136,7 @@ static bool make_token(char *e) {
 				}
 				position += substr_len;
 				nr_token++;
+	printf("nr_token=%d/n",nr_token);
 				break;
 			}
 		}
