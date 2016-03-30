@@ -216,25 +216,22 @@ static int eval(int p,int q,bool *success){
 	}
 }
 
-static bool check_parentheses_matched(int p,int q){
+static bool check_parentheses_matched(){
 	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
-	int stack[32];                // to pair parentheses
-	memset(stack, -1, 32);
-	int i, j;
+	int i,j;
 	for (i = j = 0; i < nr_token; i++) {
 		if (tokens[i].type == LB) {
 			count++;
-			stack[j++] = i;//j处的右括号对应i处的左括号
-			assert(tokens[stack[j-1]].type == LB);
 		}
 		else if (tokens[i].type == RB) {
 			count--;
-			stack[j] = -1;
 		}
+		if (count<0)
+			return false;
 	}
-	if (count == 0 && stack[0] == -1) return true;
-	printf("()%d %d\n",count,stack[0]);
-	return false;
+	if (count!=0)
+		return false;
+	return true;
 }
 
 uint32_t expr(char *e, bool *success) {
