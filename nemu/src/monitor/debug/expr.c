@@ -194,7 +194,6 @@ static int find_op(int p, int q) {
 		}
 
 	}
-	exit(0);
 	return op;
 }
 
