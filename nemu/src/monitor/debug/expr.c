@@ -260,6 +260,7 @@ static int eval(int p,int q,bool *success){
 		}
 
 		int eval1 = eval(p, op - 1,success);
+		printf("eval=%d %d\n",eval1,eval2);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
 			case SUB: return eval1 - eval2;
@@ -289,7 +290,6 @@ static int eval(int p,int q,bool *success){
 	}
 	return 0;
 	/* We should do more things here. */
-	return 0;
 }
 
 
