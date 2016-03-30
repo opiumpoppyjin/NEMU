@@ -287,6 +287,7 @@ static int eval(int p,int q,bool *success){
 
 			default: assert(0);
 		}
+		exit(1);
 	}
 	return 0;
 	/* We should do more things here. */
