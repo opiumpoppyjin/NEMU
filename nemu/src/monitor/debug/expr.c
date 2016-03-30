@@ -109,7 +109,6 @@ static bool make_token(char *e) {
 				int substr_len = pmatch.rm_eo;
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -120,7 +119,7 @@ static bool make_token(char *e) {
 					case HEX:case NUM:case REG: 
 						tokens[nr_token].type=rules[i].token_type;
 						strncpy(tokens[nr_token].str,e+position,substr_len);
-				printf("num1=%s\n",tokens[nr_token].str);
+				printf("num0=%s\n",tokens[nr_token].str);
 						break;
 					case SUB:case MUL:
 						if (nr_token==0||\
@@ -135,6 +134,7 @@ static bool make_token(char *e) {
 						break;
 					default: tokens[nr_token].type=rules[i].token_type;
 				}
+				position += substr_len;
 				break;
 			}
 		}
