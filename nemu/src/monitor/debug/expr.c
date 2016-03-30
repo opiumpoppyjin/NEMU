@@ -149,9 +149,10 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+int	pair_of_LB[32];//记录在i处的LB所匹配的RB的位置 
 
 static bool check_parentheses(int p,int q,bool *success){
-	if (tokens[p].type==LB&&tokens[q].type==RB)
+	if (tokens[p].type==LB&&pair_of_LB[p]==q)
 		return true;
 	return false;
 }
@@ -183,16 +184,8 @@ static int find_op(int p, int q) {
 	int i;
 	for (i=p;i<=q;i++){
 		if (tokens[i].type==LB){
-			int j;
-			for(j=q;j>i;j--){
-				if (tokens[j].type==RB){
-					if (j==q){
-						return op;
-					}
-					i=j+1;
-					break;
-				}
-			}
+			i=pair_of_LB[i];
+
 		}
 		thislevel=level(tokens[i].type);
 		if (thislevel>minlevel){
@@ -305,12 +298,20 @@ static int eval(int p,int q,bool *success){
 
 static bool check_parentheses_matched(){
 	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
+	int stack[33];
 	int i,j;
+	for (i=0;i<32;i++){
+		stack[i]=-1;
+		pair_of_LB[i]=-1;
+	}
 	for (i = j = 0; i < nr_token; i++) {
 		if (tokens[i].type == LB) {
 			count++;
+			stack[count]=i;
 		}
 		else if (tokens[i].type == RB) {
+			pair_of_LB[stack[count]]=i;
+			stack[count]=-1;
 			count--;
 		}
 		if (count<0)
