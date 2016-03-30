@@ -136,7 +136,7 @@ static bool make_token(char *e) {
 				}
 				position += substr_len;
 				nr_token++;
-	printf("nr_token=%d/n",nr_token);
+	printf("nr_token=%d\n",nr_token);
 				break;
 			}
 		}
@@ -237,6 +237,7 @@ static bool check_parentheses_matched(int p,int q){
 }
 
 uint32_t expr(char *e, bool *success) {
+	printf("nr_token1=%d\n",nr_token);
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
@@ -247,7 +248,7 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	printf("nr_token=%d/n",nr_token);
+	printf("nr_token2=%d\n",nr_token);
 	return eval(0,nr_token-1,success);
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
