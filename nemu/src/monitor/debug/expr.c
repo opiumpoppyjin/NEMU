@@ -135,6 +135,7 @@ static bool make_token(char *e) {
 					default: tokens[nr_token].type=rules[i].token_type;
 				}
 				position += substr_len;
+				nr_token++;
 				break;
 			}
 		}
@@ -240,12 +241,12 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	if (check_parentheses_matched(0,nr_token)==false){
+	if (check_parentheses_matched(0,nr_token-1)==false){
 		*success = false;
 		return 0;
 	}
 
-	return eval(0,nr_token,success);
+	return eval(0,nr_token-1,success);
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
 }
