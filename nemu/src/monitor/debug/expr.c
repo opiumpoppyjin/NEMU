@@ -117,7 +117,6 @@ static bool make_token(char *e) {
 					case HEX:case NUM:case REG: 
 						tokens[nr_token].type=rules[i].token_type;
 						strncpy(tokens[nr_token].str,e+position,substr_len);
-						printf("num0=%s\n",tokens[nr_token].str);
 						break;
 					case SUB:case MUL:
 						if (nr_token==0||\
