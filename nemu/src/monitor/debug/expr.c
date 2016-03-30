@@ -178,7 +178,7 @@ static int find_op(int p, int q) {
 	switch (tokens[p].type) {
 		case NOT:case NEG:case BIT_NOT:case POINTER:return p;
 	}
-	int minlevel = 12,thislevel;
+	int minlevel = -1,thislevel;
 	int op=-1;
 	int i;
 	for (i=p;i<=q;i++){
