@@ -182,6 +182,7 @@ static int find_op(int p, int q) {
 		thislevel=level(tokens[i].type);
 		if (thislevel<minlevel){
 				op=i;
+				printf("op=%d",op);
 				minlevel=tokens[i].type;
 		}
 		else if(thislevel!=13){
