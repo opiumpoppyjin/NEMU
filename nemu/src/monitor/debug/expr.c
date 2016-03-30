@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include <string.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -7,9 +8,19 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	OR, AND,                    // 0, 1
+	BIT_OR, BIT_XOR, BIT_AND,   // 2, 3, 4
+	NE, EQ, LE, LS, GE, GT,     // 5, 6, 7, 8, 9, 10
+	RSHIFT, LSHIFT,             // 11, 12
+	ADD, SUB,                   // 13, 14
+	MUL, DIV, MOD,              // 15, 16, 17
+	NOT, POINTER, NEG, BIT_NOT, // 18, 19, 20, 21
+	LBRACKET, RBRACKET,         // 22, 23
+	NUM, HEX, REG,              // 25, 26, 27
+	IDENTIFIER,                 // 28
+	NOTYPE                      // 29
 
-	/* TODO: Add more token types */
+		/* TODO: Add more token types */
 
 };
 
@@ -22,9 +33,34 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
-	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{"0x[0-9a-f]+", HEX},              // heximal
+	{"[0-9]+", NUM},                // decimal
+	{"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|al|ah|cl|ch|dl|dh|bl|bh)", REG},
+	{"[A-Za-z_][A-Za-z_0-9]*", IDENTIFIER},  //标识符
+	{"\\+", ADD},
+	{"-", SUB},
+	{"\\*", MUL},
+	{"/", DIV},
+	{"%", MOD},
+	{"<<", LSHIFT},
+	{">>", RSHIFT},
+	{"<=", LE},
+	{">=", GE},
+	{"==", EQ},
+	{"!=", NE},
+	{"<", LS},
+	{">", GT},
+	{"&&", AND},
+	{"\\|\\|", OR},
+	{"!", NOT},
+	{"&", BIT_AND},
+	{"\\|", BIT_OR},
+	{"\\^", BIT_XOR},
+	{"-", NEG},
+	{"\\~", BIT_NOT},
+	{"\\*", POINTER},
+	{"\\(", LBRACKET},
+	{"\\)", RBRACKET}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -33,6 +69,7 @@ static regex_t re[NR_REGEX];
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
+ * t:let matching more effective.
  */
 void init_regex() {
 	int i;
@@ -60,7 +97,7 @@ static bool make_token(char *e) {
 	int position = 0;
 	int i;
 	regmatch_t pmatch;
-	
+
 	nr_token = 0;
 
 	while(e[position] != '\0') {
@@ -79,7 +116,22 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-					default: panic("please implement me");
+					case HEX:case NUM:case REG: 
+						tokens[nr_token].type=rules[i].token_type;
+						strncpy(tokens[nr_token].str,e+position,substr_len);
+						break;
+					case SUB:case MUL:
+						if (nr_token==0||\
+							(tokens[nr_token-1].type!=HEX\
+							&&tokens[nr_token-1].type!=NUM\
+							&&tokens[nr_token-1].type!=REG)){
+							if (rules[i].token_type==SUB)
+								tokens[nr_token].type=NEG;
+							else
+								tokens[nr_token].type=POINTER;
+						}
+						break;
+					default: tokens[nr_token].type=rules[i].token_type;
 				}
 
 				break;
