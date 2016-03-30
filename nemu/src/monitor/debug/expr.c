@@ -207,7 +207,6 @@ static int eval(int p,int q,bool *success){
 		/* The expression is surrounded by a matched pair of parentheses.
 		 * * If that is the case, just throw away the parentheses.
 		 * */
-		printf("lala!!\n");
 		return eval(p + 1, q - 1,success);
 	} 
 	else {
@@ -239,14 +238,12 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-	printf("nr_token1=%d\n",nr_token);
 
 	if (check_parentheses_matched(0,nr_token-1)==false){
 		*success = false;
 		return 0;
 	}
 
-	printf("nr_token2=%d\n",nr_token);
 	return eval(0,nr_token-1,success);
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
