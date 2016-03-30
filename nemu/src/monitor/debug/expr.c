@@ -184,7 +184,7 @@ static int find_op(int p, int q) {
 		if (thislevel<minlevel){
 				op=i;
 				printf("op=%d",op);
-				minlevel=tokens[i].type;
+				minlevel=thislevel;
 		}
 		else if(thislevel!=13){
 			return op;
