@@ -103,10 +103,10 @@ static bool make_token(char *e) {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				char *substr_start = e + position;
+			//	char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+			//	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -138,7 +138,6 @@ static bool make_token(char *e) {
 				}
 				position += substr_len;
 				nr_token++;
-				printf("nr_token=%d\n",nr_token);
 				break;
 			}
 	}
@@ -196,10 +195,8 @@ static int find_op(int p, int q) {
 			}
 		}
 		thislevel=level(tokens[i].type);
-		printf("level=%d %d\n",thislevel,minlevel);
 		if (thislevel>minlevel){
 				op=i;
-				printf("op=%d",op);
 				minlevel=thislevel;
 		}
 		else if(thislevel!=0){
@@ -211,7 +208,6 @@ static int find_op(int p, int q) {
 }
 
 static int eval(int p,int q,bool *success){
-	printf("p=%d,q=%d\n",p,q);
 	if(p > q) {
 		/* Bad expression */
 		*success=false;
@@ -274,7 +270,6 @@ static int eval(int p,int q,bool *success){
 		}
 
 		int eval1 = eval(p, op - 1,success);
-		printf("eval=%d %d %d\n",eval1,op,eval2);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
 			case SUB: return eval1 - eval2;
