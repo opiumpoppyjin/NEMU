@@ -162,9 +162,12 @@ static int eval(int p,int q,bool *success){
 		 * * Return the value of the number.
 		 * */
 		switch(tokens[p].type){
-			case NUM:case HEX: 
+			case NUM: 
 				printf("num1=%s\n",tokens[p].str);
 				return atoi(tokens[p].str);break;
+			case HEX:
+				printf("num2=%s\n",tokens[p].str);
+				return strtoull(tokens[p].str, NULL, 16);
 			case REG:
 				if (!strcmp(tokens[p].str, "$eax")) return cpu.eax;
 				else if (!strcmp(tokens[p].str, "$ecx")) return cpu.ecx;
