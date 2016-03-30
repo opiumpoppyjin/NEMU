@@ -154,6 +154,7 @@ static bool check_parentheses(int p,int q,bool *success){
 }
 
 static int eval(int p,int q,bool *success){
+	printf("%d,%d\n",p,q);
 	if(p > q) {
 		/* Bad expression */
 		*success=false;
