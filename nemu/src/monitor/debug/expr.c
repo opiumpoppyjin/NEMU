@@ -146,28 +146,11 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+
 static bool check_parentheses(int p,int q,bool *success){
-	if (tokens[p].type!=LB||tokens[q].type!=RB){
+	if (tokens[p].type!=LB||tokens[q].type!=RB)
 		return false;
-	}
-	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
-	int stack[32];                // to pair parentheses
-	memset(stack, -1, 32);
-	int i, j;
-	for (i = j = 0; i < nr_token; i++) {
-		if (tokens[i].type == LB) {
-			count++;
-			stack[j++] = i;//j处的右括号对应i处的左括号
-			assert(tokens[stack[j-1]].type == LB);
-		}
-		else if (tokens[i].type == RB) {
-			count--;
-			stack[j] = -1;
-		}
-	}
-	if (count == 0 && stack[0] == -1) return true;
-	*success=false;
-	return false;
+	return true;
 }
 
 static int eval(int p,int q,bool *success){
@@ -230,8 +213,33 @@ static int eval(int p,int q,bool *success){
 	}
 }
 
+static bool check_parentheses_matched(int p,int q){
+	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
+	int stack[32];                // to pair parentheses
+	memset(stack, -1, 32);
+	int i, j;
+	for (i = j = 0; i < nr_token; i++) {
+		if (tokens[i].type == LB) {
+			count++;
+			stack[j++] = i;//j处的右括号对应i处的左括号
+			assert(tokens[stack[j-1]].type == LB);
+		}
+		else if (tokens[i].type == RB) {
+			count--;
+			stack[j] = -1;
+		}
+	}
+	if (count == 0 && stack[0] == -1) return true;
+	return false;
+}
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
+		*success = false;
+		return 0;
+	}
+
+	if (check_parentheses_matched(0,nr_token)==false){
 		*success = false;
 		return 0;
 	}
