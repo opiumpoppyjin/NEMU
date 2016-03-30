@@ -184,6 +184,10 @@ static int find_op(int p, int q) {
 				op=i;
 				minlevel=tokens[i].type;
 		}
+		else if(thislevel!=13){
+			return op;
+		}
+
 	}
 	return op;
 }
