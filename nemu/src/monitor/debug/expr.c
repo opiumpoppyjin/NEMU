@@ -89,8 +89,8 @@ typedef struct token {
 	char str[32];
 } Token;
 
-Token tokens[32];
-int nr_token;
+static Token tokens[32];
+static int nr_token;
 
 static bool make_token(char *e) {
 	int position = 0;
@@ -129,6 +129,9 @@ static bool make_token(char *e) {
 							else
 								tokens[nr_token].type=POINTER;
 						}
+					//	else {
+							
+					//	}
 						break;
 					default: tokens[nr_token].type=rules[i].token_type;
 				}
