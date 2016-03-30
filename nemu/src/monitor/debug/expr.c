@@ -136,7 +136,7 @@ static bool make_token(char *e) {
 				}
 				position += substr_len;
 				nr_token++;
-	printf("nr_token=%d\n",nr_token);
+				printf("nr_token=%d\n",nr_token);
 				break;
 			}
 		}
@@ -155,8 +155,30 @@ static bool check_parentheses(int p,int q,bool *success){
 	return false;
 }
 
+static int find_op(int p, int q) {
+	switch (tokens[p].type) {
+		case NOT:
+		case NEG:
+		case BIT_NOT:
+		case POINTER:
+			return p;
+	}
+	int min_type = NOTYPE;//当前最小的优先级
+	int op=-1;
+	int i;
+	for (i=p;i<=q;i++){
+		if (tokens[i].type<LB){//枚举值
+			if (tokens[i].type<min_type){
+				op=i;
+				min_type=tokens[i].type;
+			}
+		}
+	}
+	return op;
+}
+
 static int eval(int p,int q,bool *success){
-	printf("%d,%d\n",p,q);
+	printf("p=%d,q=%d\n",p,q);
 	if(p > q) {
 		/* Bad expression */
 		*success=false;
@@ -210,10 +232,49 @@ static int eval(int p,int q,bool *success){
 		return eval(p + 1, q - 1,success);
 	} 
 	else {
-		/* We should do more things here. */
-		return 0;
+		int op = find_op(p, q);//找到优先级最高的操作符
+		int eval2 = eval(op + 1, q,success);
+		switch (tokens[op].type) {
+			case NOT: return !eval2;
+			case NEG: return -eval2;
+			case BIT_NOT: return ~eval2;
+			case POINTER: return swaddr_read(eval2, 4); //how long?
+			default: assert(op != p);
+		}
+
+		int eval1 = eval(p, op - 1,success);
+		switch(tokens[op].type) {
+			case ADD: return eval1 + eval2;
+			case SUB: return eval1 - eval2;
+			case MUL: return eval1 * eval2;
+			case DIV: return eval1 / eval2;
+			case MOD: return eval1 % eval2;
+
+			case AND: return eval1 && eval2;
+			case OR:  return eval1 || eval2;
+
+			case BIT_OR:  return eval1 | eval2;
+			case BIT_XOR: return eval1 ^ eval2;
+			case BIT_AND: return eval1 & eval2;
+
+			case EQ: return eval1 == eval2;
+			case NE: return eval1 != eval2;
+			case LE: return eval1 <= eval2;
+			case LS: return eval1 <  eval2;
+			case GE: return eval1 >= eval2;
+			case GT: return eval1 >  eval2;
+
+			case RSHIFT: return eval1 >> eval2;
+			case LSHIFT: return eval1 << eval2;
+
+			default: assert(0);
+		}
 	}
+	return 0;
+	/* We should do more things here. */
+	return 0;
 }
+
 
 static bool check_parentheses_matched(){
 	int count = 0;  // +1 when ( and -1 when ) should be 0 at the end
