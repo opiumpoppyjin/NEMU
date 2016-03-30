@@ -1,5 +1,6 @@
 #include "nemu.h"
 #include <string.h>
+#include <stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -122,9 +123,9 @@ static bool make_token(char *e) {
 						break;
 					case SUB:case MUL:
 						if (nr_token==0||\
-							(tokens[nr_token-1].type!=HEX\
-							&&tokens[nr_token-1].type!=NUM\
-							&&tokens[nr_token-1].type!=REG)){
+								(tokens[nr_token-1].type!=HEX\
+								 &&tokens[nr_token-1].type!=NUM\
+								 &&tokens[nr_token-1].type!=REG)){
 							if (rules[i].token_type==SUB)
 								tokens[nr_token].type=NEG;
 							else
@@ -133,18 +134,74 @@ static bool make_token(char *e) {
 						break;
 					default: tokens[nr_token].type=rules[i].token_type;
 				}
-
 				break;
 			}
 		}
-
 		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
 	}
-
 	return true; 
+}
+
+static bool check_parentheses(int p,int q,bool *success){
+	return true;
+}
+
+static int eval(int p,int q,bool *success){
+	if(p > q) {
+		/* Bad expression */
+		*success=false;
+		return 0;
+	} 
+	else if(p == q) {
+		/* Single token.
+		 * * For now this token should be a number.
+		 * * Return the value of the number.
+		 * */
+		switch(tokens[p].type){
+			case NUM:case HEX: 
+				return atoi(tokens[p].str);break;
+			case REG:
+				if (!strcmp(tokens[p].str, "$eax")) return cpu.eax;
+				else if (!strcmp(tokens[p].str, "$ecx")) return cpu.ecx;
+				else if (!strcmp(tokens[p].str, "$edx")) return cpu.edx;
+				else if (!strcmp(tokens[p].str, "$ebx")) return cpu.ebx;
+				else if (!strcmp(tokens[p].str, "$esp")) return cpu.esp;
+				else if (!strcmp(tokens[p].str, "$ebp")) return cpu.ebp;
+				else if (!strcmp(tokens[p].str, "$esi")) return cpu.esi;
+				else if (!strcmp(tokens[p].str, "$edi")) return cpu.edi;
+				else if (!strcmp(tokens[p].str, "$eip")) return cpu.eip;
+			/*
+				else if (!strcmp(temp, "$ax"))  return reg_w(R_AX);
+				else if (!strcmp(temp, "$al"))  return reg_b(R_AL);
+				else if (!strcmp(temp, "$ah"))  return reg_b(R_AH);
+				else if (!strcmp(temp, "$cx"))  return reg_w(R_CX);
+				else if (!strcmp(temp, "$cl"))  return reg_b(R_CL);
+				else if (!strcmp(temp, "$ch"))  return reg_b(R_CH);
+				else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
+				else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
+				else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
+				else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
+				else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
+				else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
+			*/
+			default: 
+				*success=false;
+				return 0;
+		}
+	} 
+	else if(check_parentheses(p, q,success) == true) {
+		/* The expression is surrounded by a matched pair of parentheses.
+		 * * If that is the case, just throw away the parentheses.
+		 * */
+		return eval(p + 1, q - 1,success);
+	} 
+	else {
+		/* We should do more things here. */
+		return 0;
+	}
 }
 
 uint32_t expr(char *e, bool *success) {
@@ -153,8 +210,9 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
+	return eval(0,nr_token,success);
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+	//	panic("please implement me");
 	return 0;
 }
 

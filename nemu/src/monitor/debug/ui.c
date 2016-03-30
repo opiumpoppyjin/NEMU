@@ -83,7 +83,7 @@ static int cmd_info(char *args){
 extern uint32_t expr(char *e, bool *success);  
 static int nr_exprs=1;
 static int cmd_p(char *args){
-	bool success=1;
+	bool success=true;
 	if (args==NULL)
 		return -1;
 	int value=expr(args,&success);
