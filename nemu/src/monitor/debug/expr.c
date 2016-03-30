@@ -186,6 +186,9 @@ static int find_op(int p, int q) {
 			int j;
 			for(j=q;j>i;j--){
 				if (tokens[j].type==RB){
+					if (j==q){
+						return op;
+					}
 					i=j+1;
 					break;
 				}
