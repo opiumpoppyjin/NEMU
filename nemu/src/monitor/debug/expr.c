@@ -9,19 +9,17 @@
 #include <regex.h>
 
 enum {
-	OR, AND,                    // 0, 1
-	BIT_OR, BIT_XOR, BIT_AND,   // 2, 3, 4
-	NE, EQ, LE, LS, GE, GT,     // 5, 6, 7, 8, 9, 10
-	RSHIFT, LSHIFT,             // 11, 12
-	ADD, SUB,                   // 13, 14
-	MUL, DIV, MOD,              // 15, 16, 17
-	NOT, POINTER, NEG, BIT_NOT, // 18, 19, 20, 21
-	LB, RB,         // 22, 23
-	NUM, HEX, REG,              // 25, 26, 27
-	IDENTIFIER,                 // 28
-	NOTYPE                      // 29
-
-		/* TODO: Add more token types */
+	NOTYPE,
+	IDENTIFIER,NUM, HEX, REG,
+	LB, RB, 
+	NOT, POINTER, NEG, BIT_NOT,
+	MUL, DIV, MOD, 
+	ADD, SUB,
+	RSHIFT, LSHIFT,
+	NE, EQ, LE, LS, GE, GT, 
+	BIT_OR, BIT_XOR, BIT_AND,
+	OR, AND,
+	/* TODO: Add more token types */
 
 };
 
@@ -139,7 +137,7 @@ static bool make_token(char *e) {
 				printf("nr_token=%d\n",nr_token);
 				break;
 			}
-		}
+	}
 		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
@@ -155,23 +153,36 @@ static bool check_parentheses(int p,int q,bool *success){
 	return false;
 }
 
+static int level(int op){
+	switch(op){
+		//先算优先级大的，数越小优先级越大
+		case NOT:case POINTER:case NEG:case BIT_NOT:return 1;
+		case MUL:case DIV: case MOD: return 2;
+		case ADD:case SUB: return 3;						 
+		case RSHIFT:case LSHIFT: return 4;
+		case LE:case LS:case GE:case GT: return 5;
+		case NE:case EQ: return 6;
+		case BIT_AND: return 7;
+		case BIT_XOR: return 8;
+		case BIT_OR:return 9;
+		case AND: return 10;			
+		case OR: return 11;
+		default:return 13;
+	}
+}
+
 static int find_op(int p, int q) {
 	switch (tokens[p].type) {
-		case NOT:
-		case NEG:
-		case BIT_NOT:
-		case POINTER:
-			return p;
+		case NOT:case NEG:case BIT_NOT:case POINTER:return p;
 	}
-	int min_type = NOTYPE;//当前最小的优先级
+	int minlevel = 12,thislevel;
 	int op=-1;
 	int i;
 	for (i=p;i<=q;i++){
-		if (tokens[i].type<LB){//枚举值
-			if (tokens[i].type<min_type){
+		thislevel=level(tokens[i].type);
+		if (thislevel<minlevel){
 				op=i;
-				min_type=tokens[i].type;
-			}
+				minlevel=tokens[i].type;
 		}
 	}
 	return op;
