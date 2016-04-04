@@ -38,13 +38,7 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-static int cmd_si(char *args){
-	if (args==NULL)	
-		cpu_exec(1);
-	else{
-		int nr_steps=atoi(args);
-		cpu_exec(nr_steps);
-	}
+static int cmd_b(char *args){
 	return 0;
 }
 
@@ -97,6 +91,20 @@ static int cmd_p(char *args){
 	return 0;
 }
 
+static int cmd_si(char *args){
+	if (args==NULL)	
+		cpu_exec(1);
+	else{
+		int nr_steps=atoi(args);
+		cpu_exec(nr_steps);
+	}
+	return 0;
+}
+
+static int cmd_w(char *args){
+	return 0;	
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -106,10 +114,13 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 
-	{ "info", "-r Print information of registers.\
+	{ "b","Set breakpoint", cmd_b},
+	{ "info", "-b Print information of breakpoint.\
+		\n		 -r Print information of registers.\
 		\n       -w Print information of watchpoints.", cmd_info},
 	{ "p", "Expression evaluation", cmd_p},
-	{ "si", "Single-step excution", cmd_si}
+	{ "si", "Single-step excution", cmd_si},
+	{ "w", "Set watchpoint",cmd_w}
 
 	/* TODO: Add more commands */
 

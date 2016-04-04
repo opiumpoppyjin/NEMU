@@ -8,6 +8,7 @@ extern char *exec_file;
 
 void load_elf_tables(int, char *[]);
 void init_regex();
+void init_bp_list();
 void init_wp_list();
 void init_ddr3();
 
@@ -34,6 +35,9 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Compile the regular expressions. */
 	init_regex();
+
+	/*zwj initialize the breakpoint link list. */
+	init_bp_list();
 
 	/* Initialize the watchpoint link list. */
 	init_wp_list();
