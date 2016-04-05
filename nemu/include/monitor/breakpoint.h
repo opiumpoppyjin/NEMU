@@ -12,4 +12,6 @@ typedef struct breakpoint{
 
 }BP;
 
+void add_bp(char *e);
+
 #endif
