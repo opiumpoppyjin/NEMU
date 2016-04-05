@@ -32,7 +32,7 @@ void add_bp(char *e){
 	if (success==1)
 		free_->addr=addr;
 	free_=free_->next;
-
+printf("shit!\n");
 	swaddr_write(addr, 1, 0xcc);
 }
 
