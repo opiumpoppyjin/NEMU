@@ -38,7 +38,13 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+extern void add_bp(char *e);
 static int cmd_b(char *args){
+	if (args==NULL){
+		printf("Please querry where to break!\n");
+		return -1;
+	}
+	add_bp(args);
 	return 0;
 }
 
