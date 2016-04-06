@@ -31,7 +31,12 @@ void add_wp(char *e){
 	}
 	strncpy(free_->expr,e,32);
 	bool success=true;
-	free_->value=expr(e,&success);
+	uint32_t value=expr(e,&success);
+	if (success==false) {
+		printf("Wrong expr!\n");
+		return;
+	}
+	free_->value=value;
 	free_=free_->next;
 }
 
