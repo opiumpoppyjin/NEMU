@@ -52,7 +52,7 @@ void end_bp(uint32_t addr){
 }
 
 void info_bp(){
-	printf("NO\taddress\twhat\n");
+	printf("NO\taddress\t\twhat\n");
 	BP *temp;
 	for (temp=head;temp!=free_;temp=temp->next) {
 		printf("%d\t0x%x\t%s\n",(temp-bp_list)/4,temp->addr,temp->expr);
