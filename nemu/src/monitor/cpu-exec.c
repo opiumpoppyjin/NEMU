@@ -83,7 +83,8 @@ void cpu_exec(volatile uint32_t n) {
 			end_bp(cpu.eip);	
 //			nemu_state=RUNNING;
 		}
-		//check_wp(cpu.eip);
+		bool iswp=check_wp(cpu.eip);
+		if (iswp==true);
 
 		if(nemu_state != RUNNING) { return; }
 	}
