@@ -48,9 +48,8 @@ void end_bp(uint32_t addr){
 		}
 	}
 	if (isbp==0)
-		return;
-	
-//	swaddr_write(addr,1,temp->data);
+		return;	
+	swaddr_write(addr,1,temp->data);
 }
 
 void info_bp(){
