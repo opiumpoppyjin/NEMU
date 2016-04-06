@@ -41,6 +41,8 @@ void add_wp(char *e){
 }
 
 void check_wp(swaddr_t addr){
+	if (head==NULL)
+		return;
 	bool success=true;
 	uint32_t value;
 	WP *temp;
@@ -75,7 +77,7 @@ void info_wp(){
 	printf("NO\taddress\t\twhat\n");
 	WP *temp;
 	for (temp=head;temp!=free_;temp=temp->next) {
-		printf("%d\t0x%x\t%s\n",(temp-wp_list)/4,temp->addr,temp->expr);
+		printf("%d\t\t%s\n",(temp-wp_list)/4,temp->expr);
 	}
 }
 /* TODO: Implement the functionality of watchpoint */
