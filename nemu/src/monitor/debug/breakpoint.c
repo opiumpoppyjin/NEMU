@@ -32,6 +32,7 @@ void add_bp(char *e){
 	if (success==1)
 		free_->addr=addr;
 	free_->data=swaddr_read(addr,1);
+
 	free_=free_->next;
 printf("shit!=%x\n",addr);
 	swaddr_write(addr, 1, 0xcc);
@@ -49,6 +50,6 @@ void end_bp(uint32_t addr){
 	if (isbp==0)
 		return;
 	swaddr_write(addr,1,temp->data);
-
+	printf("data = %x\n",temp->data);
 }
 
