@@ -39,14 +39,14 @@ printf("shit!=%x\n",addr);
 }
 //first judge this is bp.If it is bp, end it.
 void end_bp(uint32_t addr){
-	printf("addr = %x/n",addr);
+	printf("addr = %x\n",addr);
 	BP *temp;
 	bool isbp=1;
 	for (temp=head;temp!=free_;temp=temp->next) {
 		if (addr==temp->addr) {
-			isbp=0;
 			break;
 		}
+			isbp=0;
 	}
 	if (isbp==0)
 		return;
