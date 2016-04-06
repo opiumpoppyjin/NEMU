@@ -2,7 +2,7 @@
 #define __BREAKPOINT_H__
 
 #include "common.h"
-#include "memory/memory.h"
+
 
 typedef struct breakpoint{
 	int NO;

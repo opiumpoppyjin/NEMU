@@ -1,5 +1,6 @@
 #include "monitor/breakpoint.h"
 #include "monitor/expr.h"
+#include "memory/memory.h"
 
 #define NR_BP 32
 
