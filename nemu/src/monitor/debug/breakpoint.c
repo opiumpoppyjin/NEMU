@@ -34,12 +34,10 @@ void add_bp(char *e){
 	free_->data=swaddr_read(addr,1);
 
 	free_=free_->next;
-printf("shit!=%x\n",addr);
 	swaddr_write(addr, 1, 0xcc);
 }
 //first judge this is bp.If it is bp, end it.
 void end_bp(uint32_t addr){
-	printf("addr = %x\n",addr);
 	BP *temp;
 	bool isbp=0;
 	for (temp=head;temp!=free_;temp=temp->next) {
@@ -51,6 +49,5 @@ void end_bp(uint32_t addr){
 	if (isbp==0)
 		return;
 	swaddr_write(addr,1,temp->data);
-	printf("data = %x\n",temp->data);
 }
 
