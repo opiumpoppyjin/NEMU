@@ -80,10 +80,10 @@ void cpu_exec(volatile uint32_t n) {
 		if (nemu_state==STOP){
 			cpu.eip -= instr_len;
 			end_bp(cpu.eip);	
-//			nemu_state=RUNNING;
 		}
 		bool iswp=check_wp(cpu.eip);
-		if (iswp==true);
+		if (iswp==true)
+			break;
 		end_wp(cpu.eip);
 
 		if(nemu_state != RUNNING) { return; }
