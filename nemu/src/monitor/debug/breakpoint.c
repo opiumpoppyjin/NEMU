@@ -41,12 +41,12 @@ printf("shit!=%x\n",addr);
 void end_bp(uint32_t addr){
 	printf("addr = %x\n",addr);
 	BP *temp;
-	bool isbp=1;
+	bool isbp=0;
 	for (temp=head;temp!=free_;temp=temp->next) {
 		if (addr==temp->addr) {
+			isbp=1;
 			break;
 		}
-			isbp=0;
 	}
 	if (isbp==0)
 		return;
