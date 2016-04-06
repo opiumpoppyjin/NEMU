@@ -51,3 +51,10 @@ void end_bp(uint32_t addr){
 	swaddr_write(addr,1,temp->data);
 }
 
+void info_bp(){
+	printf("NO\taddress\twhat\n");
+	BP *temp;
+	for (temp=head;temp!=free_;temp=temp->next) {
+		printf("%d\t0x%x\t%s\n",(temp-bp_list)/4,temp->addr,temp->expr);
+	}
+}
