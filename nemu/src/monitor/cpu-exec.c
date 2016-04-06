@@ -2,6 +2,8 @@
 #include "cpu/helper.h"
 #include <setjmp.h>
 
+#include "monitor/breakpoint.h"
+
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the ``si'' command.
@@ -73,7 +75,10 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		/* TODO: check watchpoints here. */
-
+		if (nemu_state==STOP){
+			cpu.eip -= instr_len;
+			
+		}
 
 		if(nemu_state != RUNNING) { return; }
 	}
