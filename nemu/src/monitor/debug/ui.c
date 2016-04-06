@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/breakpoint.h"
 #include "nemu.h"
 
 #include <stdlib.h>
@@ -38,7 +39,6 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-extern void add_bp(char *e);
 static int cmd_b(char *args){
 	if (args==NULL){
 		printf("Please querry where to break!\n");
@@ -48,7 +48,6 @@ static int cmd_b(char *args){
 	return 0;
 }
 
-extern void info_bp();
 static int cmd_info(char *args){
 	if (args==NULL)
 		return -1;
@@ -81,6 +80,9 @@ static int cmd_info(char *args){
 	else if (strcmp(args,"b")==0){
 		info_bp();	
 	}
+	else if (strcmp(args,"w")==0){
+		info_wp();	
+	}
 	return 0;
 }
 
@@ -112,6 +114,11 @@ static int cmd_si(char *args){
 }
 
 static int cmd_w(char *args){
+	if (args==NULL){
+		printf("Please querry what to watching!\n");
+		return -1;
+	}
+	add_wp(args);
 	return 0;	
 }
 

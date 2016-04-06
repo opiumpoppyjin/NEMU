@@ -14,4 +14,7 @@ typedef struct watchpoint {
 	/* TODO: Add more members if necessary */
 } WP;
 
+void add_wp(char *e);
+void info_wp();
+
 #endif
