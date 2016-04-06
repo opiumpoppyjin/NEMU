@@ -55,6 +55,7 @@ bool check_wp(swaddr_t addr){
 				swaddr_write(addr, 1, 0xcc);
 				temp->stop=true;
 				ret=true;
+				printf("Hit watchpoint: %s\n",temp->expr);
 			}
 		}
 	}
