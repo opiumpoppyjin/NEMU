@@ -36,6 +36,8 @@ void do_int3() {
 	nemu_state = STOP;
 }
 
+extern bool check_wp(swaddr_t addr);
+
 /* Simulate how the CPU works. */
 void cpu_exec(volatile uint32_t n) {
 	if(nemu_state == END) {
@@ -75,6 +77,9 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		/* TODO: check watchpoints here. */
+		if (check_wp(cpu.eip)==true)
+			break;
+
 		if (nemu_state==STOP){
 			cpu.eip -= instr_len;
 			end_bp(cpu.eip);	

@@ -40,9 +40,10 @@ void add_wp(char *e){
 	free_=free_->next;
 }
 
-void check_wp(swaddr_t addr){
+bool check_wp(swaddr_t addr){
 	if (head==NULL)
-		return;
+		return false;
+	bool ret=false;
 	bool success=true;
 	uint32_t value;
 	WP *temp;
@@ -53,9 +54,11 @@ void check_wp(swaddr_t addr){
 				temp->addr=swaddr_read(addr,1);
 				swaddr_write(addr, 1, 0xcc);
 				temp->stop=true;
+				ret=true;
 			}
 		}
 	}
+	return ret;
 }
 
 //first judge this is bp.If it is bp, end it.
