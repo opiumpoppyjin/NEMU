@@ -2,7 +2,7 @@
 #include "cpu/helper.h"
 #include <setjmp.h>
 
-#include "monitor/breakpoint.h"
+extern void end_bp(uint32_t addr);
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
