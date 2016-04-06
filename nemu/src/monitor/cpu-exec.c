@@ -77,13 +77,13 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		/* TODO: check watchpoints here. */
-		check_wp(cpu.eip);
 
 		if (nemu_state==STOP){
 			cpu.eip -= instr_len;
 			end_bp(cpu.eip);	
 //			nemu_state=RUNNING;
 		}
+		check_wp(cpu.eip);
 
 		if(nemu_state != RUNNING) { return; }
 	}
