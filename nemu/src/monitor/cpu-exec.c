@@ -77,7 +77,7 @@ void cpu_exec(volatile uint32_t n) {
 		/* TODO: check watchpoints here. */
 		if (nemu_state==STOP){
 			cpu.eip -= instr_len;
-			
+			end_bp(cpu.eip);	
 		}
 
 		if(nemu_state != RUNNING) { return; }
