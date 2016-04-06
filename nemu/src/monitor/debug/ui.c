@@ -48,10 +48,11 @@ static int cmd_b(char *args){
 	return 0;
 }
 
+extern void info_bp();
 static int cmd_info(char *args){
 	if (args==NULL)
 		return -1;
-	else if(strcmp(args,"r")==0){
+	else if (strcmp(args,"r")==0){
 		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
 		printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
 		printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx); 
@@ -76,6 +77,9 @@ static int cmd_info(char *args){
 			  );
 		printf("CS %x DS %x SS %x\n", cpu.cs, cpu.ds, cpu.ss);
 		*/
+	}
+	else if (strcmp(args,"b")==0){
+		info_bp();	
 	}
 	return 0;
 }
