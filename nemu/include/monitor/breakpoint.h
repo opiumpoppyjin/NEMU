@@ -9,6 +9,7 @@ typedef struct breakpoint{
 	struct breakpoint *next;
 	char expr[32];
 	swaddr_t addr;
+	unsigned char data;
 
 }BP;
 
