@@ -1,7 +1,7 @@
 #include "monitor/monitor.h"
 #include "cpu/helper.h"
 #include <setjmp.h>
-
+#include "monitor/watchpoint.h"
 extern void end_bp(uint32_t addr);
 
 /* The assembly code of instructions executed is only output to the screen
@@ -36,7 +36,6 @@ void do_int3() {
 	nemu_state = STOP;
 }
 
-extern bool check_wp(swaddr_t addr);
 
 /* Simulate how the CPU works. */
 void cpu_exec(volatile uint32_t n) {
@@ -85,6 +84,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 		bool iswp=check_wp(cpu.eip);
 		if (iswp==true);
+		end_wp(cpu.eip);
 
 		if(nemu_state != RUNNING) { return; }
 	}

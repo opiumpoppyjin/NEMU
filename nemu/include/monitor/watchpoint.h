@@ -16,5 +16,7 @@ typedef struct watchpoint {
 
 void add_wp(char *e);
 void info_wp();
+bool check_wp(swaddr_t addr);
+void end_wp(uint32_t addr);
 
 #endif
