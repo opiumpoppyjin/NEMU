@@ -82,7 +82,6 @@ static int cmd_info(char *args){
 	return 0;
 }
 
-extern uint32_t expr(char *e, bool *success);  
 static int cmd_p(char *args){
 	static int nr_exprs=1;
 	bool success=true;
