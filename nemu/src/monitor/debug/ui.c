@@ -33,12 +33,6 @@ static int cmd_c(char *args) {
 	return 0;
 }
 
-static int cmd_q(char *args) {
-	return -1;
-}
-
-static int cmd_help(char *args);
-
 static int cmd_b(char *args){
 	if (args==NULL){
 		printf("Please querry where to break!\n");
@@ -47,6 +41,8 @@ static int cmd_b(char *args){
 	add_bp(args);
 	return 0;
 }
+
+static int cmd_help(char *args);
 
 static int cmd_info(char *args){
 	if (args==NULL)
@@ -87,8 +83,8 @@ static int cmd_info(char *args){
 }
 
 extern uint32_t expr(char *e, bool *success);  
-static int nr_exprs=1;
 static int cmd_p(char *args){
+	static int nr_exprs=1;
 	bool success=true;
 	if (args==NULL)
 		return -1;
@@ -101,6 +97,10 @@ static int cmd_p(char *args){
 		printf("Invalid expression!\n");
 	}
 	return 0;
+}
+
+static int cmd_q(char *args) {
+	return -1;
 }
 
 static int cmd_si(char *args){
@@ -127,15 +127,14 @@ static struct {
 	char *description;
 	int (*handler) (char *);
 } cmd_table [] = {
-	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
-	{ "q", "Exit NEMU", cmd_q },
-
 	{ "b","Set breakpoint", cmd_b},
+	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "info", "-b Print information of breakpoint.\
 		\n		 -r Print information of registers.\
 		\n       -w Print information of watchpoints.", cmd_info},
 	{ "p", "Expression evaluation", cmd_p},
+	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Single-step excution", cmd_si},
 	{ "w", "Set watchpoint",cmd_w}
 
