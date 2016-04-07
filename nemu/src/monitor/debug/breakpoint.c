@@ -55,7 +55,9 @@ void end_bp(uint32_t addr){
 void info_bp(){
 	printf("NO\taddress\t\twhat\n");
 	BP *temp;
+	int i=1;
 	for (temp=head;temp!=free_;temp=temp->next) {
-		printf("%d\t0x%x\t%s\n",(temp-bp_list)/4,temp->addr,temp->expr);
+		printf("%d\t0x%x\t%s\n",i,temp->addr,temp->expr);
+		i++;
 	}
 }
