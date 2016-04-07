@@ -2,8 +2,7 @@
 #include "cpu/helper.h"
 #include <setjmp.h>
 #include "monitor/watchpoint.h"
-extern void end_bp(uint32_t addr);
-
+#include "monitor/breakpoint.h"
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the ``si'' command.
@@ -74,16 +73,13 @@ void cpu_exec(volatile uint32_t n) {
 			printf("%s\n", asm_buf);
 		}
 #endif
-
-		/* TODO: check watchpoints here. */
-
+		/*zwj:recover original instr.*/
 		if (nemu_state==STOP){
 			cpu.eip -= instr_len;
 			end_bp(cpu.eip);	
-		//	end_wp(cpu.eip);
 		}
-		//bool iswp=check_wp(cpu.eip);
-		//if (iswp==true);
+		/* TODO: check watchpoints here. */
+
 
 		if(nemu_state != RUNNING) { return; }
 	}
